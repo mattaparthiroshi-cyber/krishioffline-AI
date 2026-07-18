@@ -7,11 +7,11 @@ function App() {
   const [prediction, setPrediction] = useState("");
   const [solution, setSolution] = useState("");
   const [loading, setLoading] = useState(true);
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
     const loadAIModel = async () => {
       try {
-        
         const URL = "https://teachablemachine.withgoogle.com/models/YYF1MYWXu/"; 
         const loadedModel = await tmImage.load(URL + "model.json", URL + "metadata.json");
         setModel(loadedModel);
@@ -24,14 +24,12 @@ function App() {
     loadAIModel();
   }, []);
 
-  
-    const [fileName, setFileName] = useState("");
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file));
       setFileName(file.name.toLowerCase());
+      setPrediction("Analyzing...");
       setSolution("");
     }
   };
@@ -49,7 +47,6 @@ function App() {
     
     
     if (textToCheck.includes("soil") || textToCheck.includes("dry") || textToCheck.includes("3")) {
-      
       if (fileName.includes("black") || fileName.includes("clay") || fileName.includes("నల్ల")) {
         setSolution("🧱 నల్ల రేగడి నేల (Black Soil) తేమ లోపం: ఈ మట్టికి జిగట గుణం ఎక్కువ. నీరు నిల్వ ఉండకుండా చూస్తూ, లోతు దుక్కులు దున్నండి. సేంద్రీయ వ్యర్థాలతో మల్చింగ్ చేయడం వల్ల భూమి పగలకుండా తేమ నిలిచి ఉంటుంది.");
       } else if (fileName.includes("sandy") || fileName.includes("red") || fileName.includes("ఇసుక") || fileName.includes("ఎర్ర")) {
@@ -57,32 +54,26 @@ function App() {
       } else if (fileName.includes("paddy") || fileName.includes("rice") || fileName.includes("వరి")) {
         setSolution("🌾 వరి పొలంలో నీటి ఎద్దడి: వరి పంటకు రక్షక నీటి తడులు అవసరం. పొలంలో పగుళ్లు రాకుండా 'ఆల్టర్నేట్ వెట్టింగ్ అండ్ డ్రైయింగ్' (AWD - మార్చి మార్చి నీరు పెట్టే విధానం) పద్ధతిని వాడండి, ఇది 30% వరకు నీటిని ఆదా చేస్తుంది.");
       } else {
-        
         setSolution("🤎 నేలలో తేమ తక్కువగా ఉంది: నీటి ఆవిరిని అరికట్టడానికి ఎండుటాకులు లేదా గడ్డితో సేంద్రీయ మల్చింగ్ (Organic Mulching) పద్ధతిని వాడండి. నీటి సంరక్షణ కోసం స్మార్ట్ డ్రిప్ ఇరిగేషన్ పద్ధతిని అనుసరించండి.");
       }
-
-    }
-    
+    } 
+   
     else if (textToCheck.includes("diseased") || textToCheck.includes("mold") || textToCheck.includes("spots") || textToCheck.includes("2")) {
-      
       if (fileName.includes("tomato") || fileName.includes("టమోటా")) {
         setSolution("🍅 టమోటా లీఫ్ మోల్డ్/తెగులు గుర్తించబడింది: కెమికల్స్ వాడకుండా, 1 లీటరు నీటిలో 5ml వేప నూనె (Neem Oil) మరియు కొద్దిగా బేకింగ్ సోడా కలిపి 7 రోజులకు ఒకసారి ఆకులపై స్ప్రే చేయండి.");
       } else if (fileName.includes("paddy") || fileName.includes("rice") || fileName.includes("వరి")) {
         setSolution("🌾 వరి అగ్గితెగులు (Blast Disease) సంకేతాలు: నత్రజని (Nitrogen) ఎరువుల వాడకాన్ని తగ్గించండి. పర్యావరణ హిత సూడోమోనాస్ ఫ్లోరసెన్స్ (Pseudomonas fluorescens) జీవ నియంత్రణ పొడిని పిచికారీ చేయండి.");
       } else if (fileName.includes("chilli") || fileName.includes("మిరప")) {
-        setSolution("🌶️ మిరప ఆకు ముడుత తెగులు (Leaf Curl): ఇది రసం పీల్చే పురుగుల వల్ల వస్తుంది. పొలంలో పసుపు జిగురు బోర్డులు (Yellow Sticky Traps) పెట్టండి మరియు ఘాటైన వేపకషాయం చల్లండి.");
+        setSolution("🌶️ మిరప ఆకు ముడుత తెగులు (Leaf Curl): ఇది రసం పీల్చే పురుగుల వల్ల వస్తుంది. పొలంలో పసుపు జిగురు బోర్డులు (Yellow Sticky Traps) పెట్టండి మరియు ఘาటైన వేపకషాయం చల్లండి.");
       } else {
-        
         setSolution("🌿 పంట ఆకుపై తెగులు గుర్తించబడింది: రసాయన మందులు (Chemical Fertilizers) వాడకుండా, 5% వేప నూనె (Neem Oil) లేదా పుల్లటి మజ్జిగ ద్రావణాన్ని సహజ జీవ నియంత్రణ కారకంగా పిచికారీ చేయండి.");
       }
-
     } 
-   
+    
     else {
       setSolution("మీ పంట చాలా ఆరోగ్యంగా ఉంది! నేల సారాన్ని కాపాడటానికి పచ్చిరొట్ట ఎరువులు లేదా వర్మీకంపోస్ట్ (Organic Composting) ఉపయోగించడం కొనసాగించండి.");
     }
   };
-  
 
   return (
     <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif', textAlign: 'center', backgroundColor: '#f4f9f4', minHeight: '100vh' }}>
